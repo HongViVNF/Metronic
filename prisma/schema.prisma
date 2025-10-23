@@ -7,14 +7,12 @@ datasource db {
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
-
 // User Modoule
 enum UserStatus {
   INACTIVE
   ACTIVE
   BLOCKED
 }
-
 model User {
   id              String      @id @default(uuid())
   email           String      @unique
@@ -30,13 +28,17 @@ model User {
   emailVerifiedAt DateTime?
   isTrashed       Boolean     @default(false)
   avatar          String?
+  permissions         String[] // text[]
+  last_activity_date  DateTime? // timestamp without time zone
   invitedByUserId String?
   isProtected     Boolean     @default(false) // Prevents deletion/modification
   role            UserRole    @relation(fields: [roleId], references: [id])
   systemLog       SystemLog[]
   accounts        Account[]
   Session         Session[]
-
+  // Relations
+  jobsCreated Job[] @relation("JobCreatedBy")
+  jobsUpdated Job[] @relation("JobUpdatedBy")
   // Indexes for efficient querying
   @@index([invitedByUserId])
   @@index([roleId])
@@ -167,4 +169,633 @@ model SystemSetting {
   notifySystemErrorFailureEmail  Boolean  @default(true)
   notifySystemErrorWeb           Boolean  @default(true)
   notifySystemErrorRoleIds       String[]
+}
+
+
+model Permissions {
+  id        String    @id @default(uuid()) // text, giả sử là UUID ngẫu nhiên
+  idCourse  String?
+  dsUser    String[] // text[]
+  startTime DateTime?
+  endTime   DateTime?
+}
+
+model NhanVien {
+  id          String    @id @default(uuid())
+  hoTen       String
+  ngaySinh    DateTime?
+  diaChi      String?
+  soDienThoai String?
+  email       String?   @unique
+  chucVu      String?
+  phongBan    String?
+  ngayVaoLam  DateTime?
+  isActive    Boolean   @default(true)
+  type        String?
+  createdOn   DateTime  @default(now())
+  updatedOn   DateTime? @updatedAt
+  createdById String?
+  updatedById String?
+}
+
+model Candidate {
+  id              String    @id @default(uuid())
+  full_name       String
+  email           String
+  birthdate       DateTime?
+  gender          String?
+  position        String?
+  experience      String?
+  source          String?
+  strengths       String?
+  weaknesses      String?
+  skills          String?
+  pipeline_status String?
+  reject_reason   String?
+  cv_link         String?
+  fit_score       Float?
+  note            String?       
+  cv_summary      String? @db.Text 
+  evaluation      String?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  stage_id        String?
+  stage           Stage?   @relation(fields: [stage_id], references: [id])
+  job_id          String?
+  job             Job?      @relation(fields: [job_id], references: [id])
+  test_id String?
+  
+  // New relation
+  cv_uploads CVUpload[]
+  activities    Activity[]
+  candidate_activities candidate_activity[]
+  exams ExamHR[] @relation("CandidateExam")
+  examAssignments ExamAssignment[]
+}
+
+
+model CVUpload {
+  id           String   @id @default(uuid())
+  candidate_id String
+  job_id       String
+  file_url     String
+  hash         String
+  status       String
+  created_at   DateTime @default(now())
+
+  // Relations
+  candidate Candidate @relation(fields: [candidate_id], references: [id], onDelete: Cascade)
+  job       Job       @relation(fields: [job_id], references: [id])
+}
+
+model Job {
+  id           String   @id @default(uuid())
+  jobCode      String   @unique
+  title        String
+  descriptions String?
+  requirements String?
+  status       JobStatus @default(DRAFT)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  created_by   String?
+  updated_by   String?
+  pipelineId   String?
+  startDate    DateTime?
+  endDate      DateTime?
+
+  // Relations
+  createdBy  User?       @relation("JobCreatedBy", fields: [created_by], references: [id])
+  updatedBy  User?       @relation("JobUpdatedBy", fields: [updated_by], references: [id])
+  pipeline    HiringPipeline?  @relation("JobPipeline", fields: [pipelineId], references: [id])
+  candidates Candidate[]
+  cv_uploads CVUpload[]
+  interviews  Interview[]
+}
+
+enum JobStatus {
+  DRAFT
+  OPEN
+  CLOSED
+}
+
+model HiringPipeline {
+  id           String   @id @default(uuid())
+  name         String
+  descriptions String?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  created_by   String?
+  updated_by   String?
+  isDefault    Boolean  @default(false)
+
+  // Relation
+  stages Stage[]
+  jobs         Job[]    @relation("JobPipeline")
+}
+
+model Stage {
+  id                 String          @id @default(uuid())
+  name               String
+  description        String
+  isDefault          Boolean         @default(false)
+  created_at         DateTime        @default(now())
+  updated_at         DateTime        @updatedAt
+  created_by         String
+  updated_by         String
+  settings           Json?
+  hiring_pipeline_id String?
+  hiring_pipeline    HiringPipeline? @relation(fields: [hiring_pipeline_id], references: [id])
+  candidates Candidate[]
+}
+
+model Activity {
+  id          String   @id @default(uuid())
+  name        String?
+  description String?
+  type        String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  created_by  String
+  updated_by  String
+  candidateId   String
+  candidate     Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  exam_id      String?  // ID của exam khi type === 'test'
+} 
+
+model check_list {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  created_by  String
+  updated_by  String
+}
+
+enum CandidateActivityStatus {
+  in_progress
+  completed
+  cancelled
+}
+
+model candidate_activity {
+  id           String      @id @default(uuid())
+  start_date   DateTime
+  end_date     DateTime
+  status       CandidateActivityStatus @default(in_progress)
+  result       String?     // pending, pass, fail
+  noteresult   String?     // Note riêng của candidate trong activity này
+  check_list   Json? // jsonb 
+  assignee     String
+  participants String[]
+  stage_id     String
+  candidate_id String
+  task_id      String
+  interviews   Interview[]
+  examAssignments ExamAssignment[]
+  candidate Candidate @relation(fields: [candidate_id], references: [id], onDelete: Cascade)
+}
+
+model Interview {
+  id                    String              @id @default(uuid())
+  isActive              Boolean             @default(true)
+  linkExam              String?             // link phỏng vấn (zoom/meet)
+  linkInterview         String?             // link khác (nếu có)
+  reject_reason         String?
+  ngay                  DateTime?           // ngày phỏng vấn
+  type                  String?
+  idcandidate           String?
+  candidate_activity_id String?
+  location              String?             // 📍 địa điểm phỏng vấn
+  jobId                 String?             // 🔗 Job liên quan
+  confirmed             Boolean             @default(false) // ✅ Trạng thái xác nhận tham gia phỏng vấn
+  createdOn             DateTime?           @default(now())
+  updatedOn             DateTime?           @updatedAt
+  createdById           String?
+  updatedById           String?
+
+  candidate_activity    candidate_activity? @relation(fields: [candidate_activity_id], references: [id], onDelete: Cascade)
+  job                   Job?                @relation(fields: [jobId], references: [id], onDelete: SetNull)
+}
+
+model EmailTemplate {
+  id        String   @id @default(cuid())
+  name      String?
+  subject   String?
+  body      String?
+  type      String?
+  variables String[] // mảng string
+  createdBy String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BaiThi {
+  id           String    @id @default(uuid())
+  nhanVienId   String // Liên kết với NhanVien
+  diem         Float? // Điểm số (thang 10)
+  ngayVaoThi   DateTime  @default(now()) // Ngày vào thi
+  ngaynop      DateTime? // Ngày vào thi
+  soCauDung    Int? // Số câu đúng
+  createdOn    DateTime? @default(now())
+  updatedOn    DateTime? @updatedAt
+  createdById  String?
+  updatedById  String?
+  idexam       String
+  solanthi     Int?
+ 
+  reportCauHoi Json?
+  cauHoi       Json? // Mảng JSON chứa danh sách câu hỏi
+}
+
+model Section {
+  id          String    @id @default(uuid()) // Chuyển id sang chuỗi với UUID
+  name        String    // Tên danh mục (ví dụ: Toán, Lý, Hóa)
+  description String?   // Mô tả danh mục (tùy chọn)
+  active      Boolean   @default(true)
+  userId     String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model BankExam {
+  id          String   @id @default(uuid()) // Add a unique ID field
+  name        String
+  description String?
+  createdAt   DateTime  @default(now())
+  userId     String?
+  updatedAt   DateTime  @updatedAt
+}
+model BankExamHR {
+  id          String   @id @default(uuid()) // Add a unique ID field
+  name        String
+  description String?
+  createdAt   DateTime  @default(now())
+  userId     String?
+  updatedAt   DateTime  @updatedAt
+  
+}
+model SectionHR {
+  id          String    @id @default(uuid()) // Chuyển id sang chuỗi với UUID
+  name        String    // Tên danh mục (ví dụ: Toán, Lý, Hóa)
+  description String?   // Mô tả danh mục (tùy chọn)
+  active      Boolean   @default(true)
+  userId     String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model QuestionHR {
+  id            String   @id @default(uuid()) // Chuyển id sang chuỗi với UUID
+  content       String // Nội dung câu hỏi
+  options       Json? // Lựa chọn trả lời (lưu dạng JSON: ["A", "B", "C", "D"])
+  correctAnswer String? // Đáp án đúng
+  row          String[] // dùng để lưu dòng câu hỏi cho type là grid
+  correctAnswerMutilchoice String[]
+  active        Boolean  @default(true)
+  idbank        String?
+  type          String?
+  userId        String? // Chuyển userId sang chuỗi
+  checkAI       Boolean  @default(true)
+  correctAI     Int?
+  prompt        String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+model ExamHR {
+  id                  String    @id @default(uuid()) // Chuyển id sang chuỗi với UUID
+  userId              String // Chuyển userId sang chuỗi
+  sectionId           Json // Chuyển sectionId thành mảng chuỗi
+  title               String
+  startDate           DateTime
+  endDate             DateTime?
+  duration            Int
+  questionCount       Int
+  code                String?
+  idLessonFile        String? // de thi cua buoi hoc tuong ung
+  settings            Json?
+  checktudongtinhDiem Boolean   @default(true)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  candidates Candidate[] @relation("CandidateExam")
+  examAssignments ExamAssignment[]
+}
+
+model BaiThiHR {
+  id           String    @id @default(uuid())
+  nhanVienId   String // Liên kết với NhanVien
+  diem         Float? // Điểm số (thang 10)
+  ngayVaoThi   DateTime  @default(now()) // Ngày vào thi
+  ngaynop      DateTime? // Ngày vào thi
+  soCauDung    Int? // Số câu đúng
+  createdOn    DateTime? @default(now())
+  updatedOn    DateTime? @updatedAt
+  createdById  String?
+  updatedById  String?
+  fileurl      String?
+  idexam       String
+  solanthi     Int?
+  reportCauHoi Json?
+  cauHoi       Json? // Mảng JSON chứa danh sách câu hỏi
+  examAssignments ExamAssignment[]
+}
+
+model ExamAssignment {
+  id             String    @id @default(uuid())
+  assigned_at    DateTime  @default(now())  // Thời điểm giao bài
+  due_date       DateTime? // Hạn nộp (tùy chọn, có thể sync từ ExamHR.endDate)
+  status         String    @default("assigned")  // "assigned", "in_progress", "completed", "expired", "cancelled"
+  note           String?   // Ghi chú giao bài (ví dụ: "Giao qua email")
+  created_by     String?   // ID người giao (user/recruiter)
+  
+  // Relations
+  candidate_id   String
+  candidate      Candidate @relation(fields: [candidate_id], references: [id], onDelete: Cascade)
+  
+  exam_id        String
+  exam           ExamHR    @relation(fields: [exam_id], references: [id], onDelete: Cascade)
+  
+  // Optional: Link với kết quả thi nếu đã hoàn thành
+  baiThiHR_id    String?   // ID của BaiThiHR nếu status = "completed"
+  baiThiHR       BaiThiHR? @relation(fields: [baiThiHR_id], references: [id])
+  
+  // Optional: Link với activity nếu cần track action
+  candidate_activity_id String?
+  candidate_activity    candidate_activity? @relation(fields: [candidate_activity_id], references: [id])
+  
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+}
+model Question {
+  id            String   @id @default(uuid()) // Chuyển id sang chuỗi với UUID
+  content       String // Nội dung câu hỏi
+  options       Json? // Lựa chọn trả lời (lưu dạng JSON: ["A", "B", "C", "D"])
+  correctAnswer String? // Đáp án đúng
+  active        Boolean  @default(true)
+  idbank        String?
+  type          String?
+  userId        String? // Chuyển userId sang chuỗi
+  checkAI       Boolean  @default(true)
+  correctAI     Int?
+  prompt        String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Exam {
+  id                  String    @id @default(uuid()) // Chuyển id sang chuỗi với UUID
+  userId              String // Chuyển userId sang chuỗi
+  sectionId           Json // Chuyển sectionId thành mảng chuỗi
+  title               String
+  startDate           DateTime?
+  endDate             DateTime?
+  duration            Int
+  questionCount       Int
+  code                String?
+  idLessonFile        String? // de thi cua buoi hoc tuong ung
+  settings            Json?
+  checktudongtinhDiem Boolean   @default(true)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+}
+
+model Post {
+  id        String    @id @default(uuid())
+  content   String // Nội dung bài viết
+  img       String[] // Mảng chứa các URL hình ảnh
+  hoTen     String // Họ tên của user
+  email     String // Email của user
+  diem      Float?
+  createdOn DateTime  @default(now())
+  updatedOn DateTime? @updatedAt
+}
+
+model ProgramCourse {
+  id        String   @id @default(uuid()) // ID dạng chuỗi, tự động tạo UUID
+  title     String
+  id_user   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Class {
+  id           String   @id @default(uuid()) // Unique ID, auto-generated UUID
+  name         String // Name of the class
+  instructorId String // ID of the instructor (user)
+  dsnv         String[] // Array of user email (nv enrolled)
+  location     String? // Physical or virtual location
+  startDate    DateTime? // Class start date
+  endDate      DateTime? // Class end date
+  createdAt    DateTime @default(now()) // Record creation time
+  updatedAt    DateTime @updatedAt // Record last update time
+  isActive     Boolean  @default(true) // Whether the class is currently active
+  idUser       String
+  notes        String? // Optional notes or additional info
+  idForm       String?
+}
+
+model Attendance {
+  id            String   @id @default(uuid())
+  content       Json?
+  answer        Json?
+  courseId      String?
+  classId       String?
+  anttendant_id String?
+  creatorId     String
+  description   String?
+  lessonFileId  String? // Khóa ngoại liên kết với Lesson
+  startDate     DateTime?
+  endDate       DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  isActive      Boolean  @default(true)
+}
+
+model Course {
+  id                String    @id @default(uuid()) // ID dạng chuỗi, tự động tạo UUID
+  title             String
+  code              String?   @unique // Mã khóa học, duy nhất
+  id_user           String
+  id_programcourse  String?
+  description       String?
+  startDate         DateTime?
+  endDate           DateTime?
+  type              String?
+  isPublic          Boolean?
+  dsnv_public       String[]
+  dsnv              String[] //  ds id nhân viên
+  dsmonhoctruoc     String[] // lưu các id course tiên quyết của khóa học nảy
+  levelcourseid     String?
+  prerequisitelevel String[] // lưu cấp độ theo id tiên quyết của khóa học này
+  createdAt         DateTime  @default(now())
+  specifiedScore    Float? // điểm tối thiểu để hoàn thành khóa học
+  updatedAt         DateTime  @updatedAt
+  idClass           String?
+  image             String?
+  idForm            String?
+}
+
+model Level {
+  id          String  @id @default(uuid()) // ID dạng chuỗi, tự động tạo UUID
+  name        String?
+  description String?
+  id_creator  String?
+}
+
+model SectionLesson {
+  id        String   @id @default(uuid())
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Enroll {
+  id            String   @id @default(uuid())
+  userId        String
+  lessonId      String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  isCertificate Boolean?
+  status        String?
+}
+
+model LessonFileProgress {
+  id           String    @id @default(uuid())
+  lessonFileId String // ID của LessonFile
+  userId       String // ID của nhân viên
+  completed    Boolean   @default(false) // Trạng thái hoàn thành
+  completedAt  DateTime? // Thời điểm hoàn thành (tùy chọn)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@unique([lessonFileId, userId])
+}
+
+model LessonFile {
+  id        String   @id @default(uuid()) // ID dạng chuỗi, tự động tạo UUID
+  title       String // tiêu đề buổi học
+  description String? // mô tả buổi học
+  file       String[]   // URL của files
+  groupleader String[]
+  startDate   DateTime?
+  endDate     DateTime?
+  active     Boolean   @default(true)  
+  weight      Float?
+  weightExam  Float?
+  lessonId  String   // Khóa ngoại liên kết với Lesson
+  lectureId String?
+  sectionlessonId String?
+  studyguide  String?
+  enableAttendance Boolean?
+  enableLessonSubmit   Boolean?
+  createdAt DateTime @default(now())
+  updatedAt   DateTime  @updatedAt
+  type        String?
+  markmap     String?
+}
+
+model FileBaiTapNhom {
+  id           String   @id @default(uuid()) // Unique identifier, auto-generated UUID
+  lessonFileId String // ID of the session (buoi hoc)
+  courseId     String // ID of the course (khoahoc)
+  groupName    String? // Name of the group (ten nhom)
+  groupScore   Float? // Score of the group assignment (diem bai tap nhom), optional
+  files        String[] // Array of file paths or URLs (file[])
+  tasks        String[] // Array of tasks (nv[])
+  userId       String // ID of the user who created the record
+  createdDate  DateTime @default(now()) // Creation date, auto-set to current timestamp
+  updatedDate  DateTime @updatedAt // Last updated date, auto-updated on changes
+}
+
+model PostVote {
+  id        String    @id @default(uuid())
+  postId    String // Liên kết với Post
+  email     String
+  voteType  String // Loại bình chọn (ví dụ: "LIKE", "DISLIKE", "UPVOTE", "DOWNVOTE")
+  createdOn DateTime  @default(now())
+  updatedOn DateTime? @updatedAt
+}
+
+model Log {
+  id        String    @id @default(uuid())
+  videoName String // Tên video liên quan đến hành động
+  email     String // Email của người dùng thực hiện hành động
+  action    String // Loại hành động (ví dụ: "copy_url", "context_menu_modal")
+  createdOn DateTime  @default(now())
+  updatedOn DateTime? @updatedAt
+}
+
+// Định nghĩa model Comment
+model Comment {
+  id        String   @id @default(uuid())
+  id_user   String // ID của người dùng bình luận
+  id_course String // ID của khóa học
+  content   String // Nội dung bình luận
+  createdAt DateTime @default(now()) // Thời gian tạo
+  updatedAt DateTime @updatedAt // Thời gian cập nhật
+}
+
+// Định nghĩa model Reply
+model Reply {
+  id         String   @id @default(uuid())
+  id_comment String // ID của bình luận
+  id_user    String // ID của người dùng phản hồi
+  content    String // Nội dung phản hồi
+  createdAt  DateTime @default(now()) // Thời gian tạo
+  updatedAt  DateTime @updatedAt // Thời gian cập nhật
+}
+
+model Form {
+  id          String         @id @default(cuid())
+  title       String?
+  description String?
+  createdBy   String // userId của admin tạo form
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  fields      FormField[] // 1-n: các câu hỏi trong form
+  responses   FormResponse[] // 1-n: các phản hồi
+  startDate   DateTime?
+  endDate     DateTime?
+  type        String         @default("public") // public, course, lesson, class 
+}
+
+model FormField {
+  id     String @id @default(cuid())
+  form   Form   @relation(fields: [formId], references: [id])
+  formId String
+
+  label    String // nội dung câu hỏi
+  type     FieldType // loại câu hỏi
+  options  Json? // cho RADIO, CHECKBOX, SELECT: ["Option A", "Option B"]
+  required Boolean   @default(false)
+  order    Int // thứ tự hiển thị
+}
+
+model FormResponse {
+  id          String   @id @default(cuid())
+  form        Form     @relation(fields: [formId], references: [id])
+  formId      String
+  idMain      String? // id chung để lưu course, lesson, class
+  userId      String // người dùng gửi form
+  submittedAt DateTime @default(now())
+  answers     Json
+}
+
+enum FieldType {
+  TEXT
+  RADIO
+  CHECKBOX
+  SELECT
+  NUMBER
+  DATE
+  FILE
+}
+
+model FormAssignment {
+  id        String   @id @default(cuid())
+  idMain    String?
+  formId    String
+  startDate DateTime?
+  endDate   DateTime?
 }

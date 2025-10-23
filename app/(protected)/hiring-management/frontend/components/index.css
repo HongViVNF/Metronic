@@ -1,0 +1,38 @@
+.editor-content {
+    width: 100%;
+    height: 250px;          /* Cố định chiều cao */
+    border: 1px solid #d1d5db; /* viền xám nhạt */
+    border-radius: 6px;
+    padding: 12px;
+    box-sizing: border-box;
+    overflow-y: auto;       /* Scroll nếu nội dung dài */
+    outline: none;
+    background: white;
+    color: #111827;
+    display: block;
+    position: relative;
+  
+    line-height: 1.3;       /* Giảm khoảng cách dòng xuống nhỏ hơn mặc định (mặc định ~1.5) */
+  }
+  
+  /* Giữ cho các block con chiếm full chiều cao vùng hiện có */
+  .editor-content > * {
+    min-height: 100%;
+    width: 100%;
+    outline: none;
+  }
+  
+  /* Focus viền nhẹ */
+  .editor-content:focus-within {
+    border-color: transparent;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Ẩn phần text vượt ra ngoài box */
+  .editor-content p {
+    margin: 0 0 0.3em 0;  /* Giảm margin bottom giữa các đoạn */
+    white-space: pre-wrap; /* Giữ xuống dòng */
+    word-break: break-word; /* Ngắt chữ dài */
+    overflow-wrap: break-word;
+  }
+  
