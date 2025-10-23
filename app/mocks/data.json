@@ -1,0 +1,413 @@
+{
+  "state": {
+    "user": {
+      "id": "40d253f4-b3f1-4ec9-9423-33c21cabc618",
+      "name": "Đỗ Mạnh Cường",
+      "shortName": "Do Manh Cuong",
+      "email": "cuong.m.do@vnfoods.vn",
+      "phone": null,
+      "pictureUrl": null,
+      "isActive": true
+    },
+    "settings": {
+      "endpoints": {
+        "apiUrl": "https://demo-backend.ls01.vnfoods.vn",
+        "mediaUrl": "https://demo-backend.ls01.vnfoods.vn"
+      }
+    },
+    "accessToken": {
+      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQwZDI1M2Y0LWIzZjEtNGVjOS05NDIzLTMzYzIxY2FiYzYxOCIsIm5hbWUiOiJcdTAxMTBcdTFlZDcgTVx1MWVhMW5oIENcdTAxYjBcdTFlZGRuZyIsInNob3J0X25hbWUiOiJEbyBNYW5oIEN1b25nIiwiZW1haWwiOiJjdW9uZy5tLmRvQHZuZm9vZHMudm4iLCJpc19hY3RpdmUiOnRydWUsInN1YiI6IjQwZDI1M2Y0LWIzZjEtNGVjOS05NDIzLTMzYzIxY2FiYzYxOCIsImV4cCI6MTc2MTI3NDQzOH0.lRDX8_targyE4A2xx2ojAGpy9mBEgNfmwzL52yNgf_o"
+    },
+    "currentApp": null,
+    "workContext": {
+      "currentUser": {
+        "id": "40d253f4-b3f1-4ec9-9423-33c21cabc618",
+        "name": "Đỗ Mạnh Cường",
+        "shortName": "Do Manh Cuong",
+        "email": "cuong.m.do@vnfoods.vn",
+        "phone": null,
+        "pictureUrl": null,
+        "isActive": true
+      },
+      "teams": [
+        {
+          "id": "fb87039f-b143-432d-b413-5990ecb8a191",
+          "name": "Dev"
+        },
+        {
+          "id": "6e59d48a-bbd7-413c-9174-76de34ed00ba",
+          "name": "Sales Managers"
+        },
+        {
+          "id": "73011694-6f99-4bc2-8901-1b4b52e19665",
+          "name": "Project Team"
+        },
+        {
+          "id": "95687d66-b080-4aa4-b4a2-b8b2064ce47a",
+          "name": "AI Core Team"
+        },
+        {
+          "id": "a4d4b210-5969-42bf-9dd4-fa107bc369e2",
+          "name": "VNF"
+        },
+        {
+          "id": "2c5ee36b-80bb-4db9-89a5-e2ec3a5c0a87",
+          "name": "Kế toán"
+        },
+        {
+          "id": "b05bac62-f705-405e-9411-aa1534aa6b66",
+          "name": "HCNS"
+        },
+        {
+          "id": "5700b066-b141-4054-8451-9d39195578ab",
+          "name": "Pháp chế"
+        },
+        {
+          "id": "986a5a44-9ad9-44e6-a57a-77e28bed52d1",
+          "name": "Agent Team"
+        }
+      ],
+      "roles": [
+        {
+          "id": 1,
+          "name": "admin"
+        }
+      ],
+      "permissions": ["admin"],
+      "settings": [],
+      "apps": [
+        {
+          "team": {
+            "id": "6e59d48a-bbd7-413c-9174-76de34ed00ba",
+            "name": "Sales Managers"
+          },
+          "instances": [
+            {
+              "name": "Document Management",
+              "description": "Manage document pack",
+              "status": 1,
+              "id": "ff3880d8-d9d6-45b3-960f-a64157932f49",
+              "userPermissions": {},
+              "appInstanceId": "ff3880d8-d9d6-45b3-960f-a64157932f49",
+              "appId": "document-management",
+              "teamId": "6e59d48a-bbd7-413c-9174-76de34ed00ba",
+              "teamName": "Sales Managers",
+              "version": "1.0",
+              "iconUrl": "http://localhost:8001/static/modules/document-management/app-icon.png",
+              "identifier": "document-management"
+            }
+          ]
+        },
+        {
+          "team": {
+            "id": "986a5a44-9ad9-44e6-a57a-77e28bed52d1",
+            "name": "Agent Team"
+          },
+          "instances": [
+            {
+              "name": "Social Manager Instance",
+              "description": "Social Manager Module",
+              "status": 1,
+              "id": "f52b6fae-5333-4e33-be00-81e28d8e5de8",
+              "userPermissions": {},
+              "appInstanceId": "f52b6fae-5333-4e33-be00-81e28d8e5de8",
+              "appId": "social-manager",
+              "teamId": "986a5a44-9ad9-44e6-a57a-77e28bed52d1",
+              "teamName": "Agent Team",
+              "version": "1.0.0",
+              "iconUrl": "http://localhost:8001/static/modules/social-manager/app-icon.png",
+              "identifier": "social-manager"
+            },
+            {
+              "name": "AI Agents",
+              "description": "AI Agents Module",
+              "status": 1,
+              "id": "f92d995d-26e7-4e33-a21c-3aedc8b77f4b",
+              "userPermissions": {},
+              "appInstanceId": "f92d995d-26e7-4e33-a21c-3aedc8b77f4b",
+              "appId": "ai-agents",
+              "teamId": "986a5a44-9ad9-44e6-a57a-77e28bed52d1",
+              "teamName": "Agent Team",
+              "version": "1.0.0",
+              "iconUrl": "http://localhost:8001/static/modules/ai-agents/app-icon.png",
+              "identifier": "ai-agents"
+            }
+          ]
+        },
+        {
+          "team": {
+            "id": "fb87039f-b143-432d-b413-5990ecb8a191",
+            "name": "Dev"
+          },
+          "instances": [
+            {
+              "name": "Book Management Instance",
+              "description": "Book Management Module",
+              "status": 1,
+              "id": "5c4f2980-6811-4d27-96fa-e41148c3dd12",
+              "userPermissions": {},
+              "appInstanceId": "5c4f2980-6811-4d27-96fa-e41148c3dd12",
+              "appId": "book-management",
+              "teamId": "fb87039f-b143-432d-b413-5990ecb8a191",
+              "teamName": "Dev",
+              "version": "1.0.0",
+              "iconUrl": null,
+              "identifier": "book-management"
+            }
+          ]
+        },
+        {
+          "team": {
+            "id": "a4d4b210-5969-42bf-9dd4-fa107bc369e2",
+            "name": "VNF"
+          },
+          "instances": [
+            {
+              "name": "Welcome Management Instance",
+              "description": "Welcome Management Module",
+              "status": 1,
+              "id": "4a0b2fb2-20ab-4fa4-954a-b8cdf87ed29f",
+              "userPermissions": {},
+              "appInstanceId": "4a0b2fb2-20ab-4fa4-954a-b8cdf87ed29f",
+              "appId": "welcome-management",
+              "teamId": "a4d4b210-5969-42bf-9dd4-fa107bc369e2",
+              "teamName": "VNF",
+              "version": "1.0",
+              "iconUrl": null,
+              "identifier": "welcome-management"
+            },
+            {
+              "name": "Task Management",
+              "description": "Task Management Module",
+              "status": 1,
+              "id": "fe5c5fc9-329c-48c2-ae8f-5af051405c69",
+              "userPermissions": {},
+              "appInstanceId": "fe5c5fc9-329c-48c2-ae8f-5af051405c69",
+              "appId": "task-management",
+              "teamId": "a4d4b210-5969-42bf-9dd4-fa107bc369e2",
+              "teamName": "VNF",
+              "version": "1.0.0",
+              "iconUrl": null,
+              "identifier": "task-management"
+            }
+          ]
+        },
+        {
+          "team": {
+            "id": "5700b066-b141-4054-8451-9d39195578ab",
+            "name": "Pháp chế"
+          },
+          "instances": [
+            {
+              "name": "Legal Knowledge Base",
+              "description": "Legal Knowledge Base Module",
+              "status": 1,
+              "id": "42fc6991-1e59-44fa-bbbc-b7ccc3cd43bb",
+              "userPermissions": {},
+              "appInstanceId": "42fc6991-1e59-44fa-bbbc-b7ccc3cd43bb",
+              "appId": "legal-kb",
+              "teamId": "5700b066-b141-4054-8451-9d39195578ab",
+              "teamName": "Pháp chế",
+              "version": "1.0.0",
+              "iconUrl": "",
+              "identifier": "legal-kb"
+            }
+          ]
+        },
+        {
+          "team": {
+            "id": "2c5ee36b-80bb-4db9-89a5-e2ec3a5c0a87",
+            "name": "Kế toán"
+          },
+          "instances": [
+            {
+              "name": "Grab Business",
+              "description": "Grab Business",
+              "status": 1,
+              "id": "42ba1563-9393-4923-8b2d-a04d4d7f3ae4",
+              "userPermissions": {},
+              "appInstanceId": "42ba1563-9393-4923-8b2d-a04d4d7f3ae4",
+              "appId": "grab-business",
+              "teamId": "2c5ee36b-80bb-4db9-89a5-e2ec3a5c0a87",
+              "teamName": "Kế toán",
+              "version": "1.0.0",
+              "iconUrl": "http://localhost:8001/static/modules/grab-business/app-icon.png",
+              "identifier": "grab-business"
+            }
+          ]
+        },
+        {
+          "team": {
+            "id": "b05bac62-f705-405e-9411-aa1534aa6b66",
+            "name": "HCNS"
+          },
+          "instances": [
+            {
+              "name": "HR Management",
+              "description": "HR Management Module to manage Attendance",
+              "status": 1,
+              "id": "ef98e5cf-2b7f-4c21-8722-9e7c713e449f",
+              "userPermissions": {},
+              "appInstanceId": "ef98e5cf-2b7f-4c21-8722-9e7c713e449f",
+              "appId": "hr-management",
+              "teamId": "b05bac62-f705-405e-9411-aa1534aa6b66",
+              "teamName": "HCNS",
+              "version": "1.0.0",
+              "iconUrl": "http://localhost:8001/static/modules/hr-management/app-icon.png",
+              "identifier": "hr-management"
+            }
+          ]
+        }
+      ],
+      "currentTeam": {
+        "id": "986a5a44-9ad9-44e6-a57a-77e28bed52d1",
+        "name": "Agent Team"
+      }
+    },
+    "recentlyUsedApps": [
+      {
+        "name": "Task Management",
+        "description": "Task Management Module",
+        "status": 1,
+        "id": "fe5c5fc9-329c-48c2-ae8f-5af051405c69",
+        "userPermissions": {},
+        "appInstanceId": "fe5c5fc9-329c-48c2-ae8f-5af051405c69",
+        "appId": "task-management",
+        "teamId": "a4d4b210-5969-42bf-9dd4-fa107bc369e2",
+        "teamName": "VNF",
+        "version": "1.0.0",
+        "iconUrl": null,
+        "identifier": "task-management"
+      }
+    ],
+    "validApps": {
+      "ff3880d8-d9d6-45b3-960f-a64157932f49": {
+        "name": "Document Management",
+        "description": "Manage document pack",
+        "status": 1,
+        "id": "ff3880d8-d9d6-45b3-960f-a64157932f49",
+        "userPermissions": {},
+        "appInstanceId": "ff3880d8-d9d6-45b3-960f-a64157932f49",
+        "appId": "document-management",
+        "teamId": "6e59d48a-bbd7-413c-9174-76de34ed00ba",
+        "teamName": "Sales Managers",
+        "version": "1.0",
+        "iconUrl": "http://localhost:8001/static/modules/document-management/app-icon.png",
+        "identifier": "document-management"
+      },
+      "f52b6fae-5333-4e33-be00-81e28d8e5de8": {
+        "name": "Social Manager Instance",
+        "description": "Social Manager Module",
+        "status": 1,
+        "id": "f52b6fae-5333-4e33-be00-81e28d8e5de8",
+        "userPermissions": {},
+        "appInstanceId": "f52b6fae-5333-4e33-be00-81e28d8e5de8",
+        "appId": "social-manager",
+        "teamId": "986a5a44-9ad9-44e6-a57a-77e28bed52d1",
+        "teamName": "Agent Team",
+        "version": "1.0.0",
+        "iconUrl": "http://localhost:8001/static/modules/social-manager/app-icon.png",
+        "identifier": "social-manager"
+      },
+      "f92d995d-26e7-4e33-a21c-3aedc8b77f4b": {
+        "name": "AI Agents",
+        "description": "AI Agents Module",
+        "status": 1,
+        "id": "f92d995d-26e7-4e33-a21c-3aedc8b77f4b",
+        "userPermissions": {},
+        "appInstanceId": "f92d995d-26e7-4e33-a21c-3aedc8b77f4b",
+        "appId": "ai-agents",
+        "teamId": "986a5a44-9ad9-44e6-a57a-77e28bed52d1",
+        "teamName": "Agent Team",
+        "version": "1.0.0",
+        "iconUrl": "http://localhost:8001/static/modules/ai-agents/app-icon.png",
+        "identifier": "ai-agents"
+      },
+      "5c4f2980-6811-4d27-96fa-e41148c3dd12": {
+        "name": "Book Management Instance",
+        "description": "Book Management Module",
+        "status": 1,
+        "id": "5c4f2980-6811-4d27-96fa-e41148c3dd12",
+        "userPermissions": {},
+        "appInstanceId": "5c4f2980-6811-4d27-96fa-e41148c3dd12",
+        "appId": "book-management",
+        "teamId": "fb87039f-b143-432d-b413-5990ecb8a191",
+        "teamName": "Dev",
+        "version": "1.0.0",
+        "iconUrl": null,
+        "identifier": "book-management"
+      },
+      "4a0b2fb2-20ab-4fa4-954a-b8cdf87ed29f": {
+        "name": "Welcome Management Instance",
+        "description": "Welcome Management Module",
+        "status": 1,
+        "id": "4a0b2fb2-20ab-4fa4-954a-b8cdf87ed29f",
+        "userPermissions": {},
+        "appInstanceId": "4a0b2fb2-20ab-4fa4-954a-b8cdf87ed29f",
+        "appId": "welcome-management",
+        "teamId": "a4d4b210-5969-42bf-9dd4-fa107bc369e2",
+        "teamName": "VNF",
+        "version": "1.0",
+        "iconUrl": null,
+        "identifier": "welcome-management"
+      },
+      "fe5c5fc9-329c-48c2-ae8f-5af051405c69": {
+        "name": "Task Management",
+        "description": "Task Management Module",
+        "status": 1,
+        "id": "fe5c5fc9-329c-48c2-ae8f-5af051405c69",
+        "userPermissions": {},
+        "appInstanceId": "fe5c5fc9-329c-48c2-ae8f-5af051405c69",
+        "appId": "task-management",
+        "teamId": "a4d4b210-5969-42bf-9dd4-fa107bc369e2",
+        "teamName": "VNF",
+        "version": "1.0.0",
+        "iconUrl": null,
+        "identifier": "task-management"
+      },
+      "42fc6991-1e59-44fa-bbbc-b7ccc3cd43bb": {
+        "name": "Legal Knowledge Base",
+        "description": "Legal Knowledge Base Module",
+        "status": 1,
+        "id": "42fc6991-1e59-44fa-bbbc-b7ccc3cd43bb",
+        "userPermissions": {},
+        "appInstanceId": "42fc6991-1e59-44fa-bbbc-b7ccc3cd43bb",
+        "appId": "legal-kb",
+        "teamId": "5700b066-b141-4054-8451-9d39195578ab",
+        "teamName": "Pháp chế",
+        "version": "1.0.0",
+        "iconUrl": "",
+        "identifier": "legal-kb"
+      },
+      "42ba1563-9393-4923-8b2d-a04d4d7f3ae4": {
+        "name": "Grab Business",
+        "description": "Grab Business",
+        "status": 1,
+        "id": "42ba1563-9393-4923-8b2d-a04d4d7f3ae4",
+        "userPermissions": {},
+        "appInstanceId": "42ba1563-9393-4923-8b2d-a04d4d7f3ae4",
+        "appId": "grab-business",
+        "teamId": "2c5ee36b-80bb-4db9-89a5-e2ec3a5c0a87",
+        "teamName": "Kế toán",
+        "version": "1.0.0",
+        "iconUrl": "http://localhost:8001/static/modules/grab-business/app-icon.png",
+        "identifier": "grab-business"
+      },
+      "ef98e5cf-2b7f-4c21-8722-9e7c713e449f": {
+        "name": "HR Management",
+        "description": "HR Management Module to manage Attendance",
+        "status": 1,
+        "id": "ef98e5cf-2b7f-4c21-8722-9e7c713e449f",
+        "userPermissions": {},
+        "appInstanceId": "ef98e5cf-2b7f-4c21-8722-9e7c713e449f",
+        "appId": "hr-management",
+        "teamId": "b05bac62-f705-405e-9411-aa1534aa6b66",
+        "teamName": "HCNS",
+        "version": "1.0.0",
+        "iconUrl": "http://localhost:8001/static/modules/hr-management/app-icon.png",
+        "identifier": "hr-management"
+      }
+    }
+  },
+  "version": 0
+}
